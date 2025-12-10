@@ -14,7 +14,6 @@ public class BallAuthoring : MonoBehaviour
             AddComponent(entity, new BallComponent
             {
                 velocity = authoring.velocity,
-                initialDirection = float3.zero,
                 isInitialized = false
             });
         }
