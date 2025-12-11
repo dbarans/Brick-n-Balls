@@ -1,7 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class GameControlsInputProvider : IInputProvider
+namespace Input
+{
+    public class GameControlsInputProvider : IInputProvider
 {
     private GameControls _controls;
     private bool _fireRequest;
@@ -37,5 +39,6 @@ public class GameControlsInputProvider : IInputProvider
     {
         _fireRequest = false;
     }
+}
 }
 

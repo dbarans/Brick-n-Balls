@@ -2,7 +2,9 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 
-public class EntityDataAccessor : IEntityDataAccessor
+namespace Data
+{
+    public class EntityDataAccessor : IEntityDataAccessor
 {
     private EntityManager _entityManager;
     private EntityQuery _ballQuery;
@@ -75,4 +77,4 @@ public class EntityDataAccessor : IEntityDataAccessor
         return _ballQuery.GetSingletonEntity();
     }
 }
-
+}

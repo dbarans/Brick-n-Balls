@@ -2,37 +2,68 @@ using UnityEngine;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
+using Input;
+using Data;
 
+/// <summary>
+/// Coordinates player input and updates ball aiming direction before firing.
+/// </summary>
 public class GameInputManager : MonoBehaviour
 {
     private IInputProvider _inputProvider;
     private IEntityDataAccessor _entityDataAccessor;
+    private IAimCalculator _aimCalculator;
     private Camera _mainCamera;
+
+    /// <summary>
+    /// Initializes dependencies via dependency injection. Falls back to default implementations if null.
+    /// </summary>
+    public void Initialize(IInputProvider inputProvider, IEntityDataAccessor entityDataAccessor, IAimCalculator aimCalculator, Camera camera)
+    {
+        _inputProvider = inputProvider;
+        _entityDataAccessor = entityDataAccessor;
+        _aimCalculator = aimCalculator;
+        _mainCamera = camera;
+    }
 
     private void Awake()
     {
-        _inputProvider = new GameControlsInputProvider();
-        
-        var world = World.DefaultGameObjectInjectionWorld;
-        _entityDataAccessor = new EntityDataAccessor(world.EntityManager);
-        
-        _mainCamera = Camera.main;
+        if (_inputProvider == null)
+        {
+            _inputProvider = new GameControlsInputProvider();
+        }
+
+        if (_entityDataAccessor == null)
+        {
+            var world = World.DefaultGameObjectInjectionWorld;
+            _entityDataAccessor = new EntityDataAccessor(world.EntityManager);
+        }
+
+        if (_aimCalculator == null)
+        {
+            _aimCalculator = new RaycastAimCalculator();
+        }
+
+        if (_mainCamera == null)
+        {
+            _mainCamera = Camera.main;
+        }
     }
 
     private void OnEnable()
     {
-        _inputProvider.Enable();
+        _inputProvider?.Enable();
     }
 
     private void OnDisable()
     {
-        _inputProvider.Disable();
+        _inputProvider?.Disable();
     }
 
     private void Update()
     {
         HandleInputAndSync();
-        _inputProvider.ResetFireRequest();
+        _inputProvider?.ResetFireRequest();
     }
 
     private void HandleInputAndSync()
@@ -45,28 +76,18 @@ public class GameInputManager : MonoBehaviour
 
         if (ballData.isFired) return;
 
-        Plane gameplayPlane = new Plane(Vector3.right, Vector3.zero);
-        Ray ray = _mainCamera.ScreenPointToRay(mouseScreenPos);
+        Vector3 direction = _aimCalculator.CalculateAimDirection(mouseScreenPos, (Vector3)startPos, _mainCamera);
 
-        if (gameplayPlane.Raycast(ray, out float enter))
+        if (direction.sqrMagnitude < 0.001f) return;
+
+        ballData.initialDirection = direction;
+
+        if (_inputProvider.GetFireInput())
         {
-            Vector3 hitPoint = ray.GetPoint(enter);
-            Vector3 direction = (hitPoint - (Vector3)startPos).normalized;
-
-            direction.x = 0;
-
-            if (direction.sqrMagnitude < 0.001f) return;
-
-            direction = direction.normalized;
-            ballData.initialDirection = direction;
-
-            if (_inputProvider.GetFireInput())
-            {
-                ballData.isFired = true;
-            }
-
-            _entityDataAccessor.SetBallComponent(ballData);
-            Debug.DrawLine(startPos, hitPoint, Color.green);
+            ballData.isFired = true;
         }
+
+        _entityDataAccessor.SetBallComponent(ballData);
+        Debug.DrawLine(startPos, (Vector3)startPos + direction * 5f, Color.green);
     }
 }
