@@ -5,35 +5,20 @@ using Unity.Mathematics;
 
 public class BallVisualSync : MonoBehaviour
 {
-    private EntityManager _entityManager;
-    private EntityQuery _ballQuery;
+    private IEntityDataAccessor _entityDataAccessor;
 
     void Start()
     {
         var world = World.DefaultGameObjectInjectionWorld;
-        _entityManager = world.EntityManager;
-
-        _ballQuery = _entityManager.CreateEntityQuery(
-            typeof(LocalTransform),
-            typeof(BallComponent)
-        );
+        _entityDataAccessor = new EntityDataAccessor(world.EntityManager);
     }
 
     void LateUpdate()
     {
-        // LateUpdate prevents jittering (syncs after physics)
-        if (!_ballQuery.IsEmpty)
+        if (_entityDataAccessor.HasBallEntity())
         {
-            var entity = _ballQuery.GetSingletonEntity();
-
-            var localTransform = _entityManager.GetComponentData<LocalTransform>(entity);
-
-            transform.position = localTransform.Position;
-            transform.rotation = localTransform.Rotation;
-        }
-        else
-        {
-
+            transform.position = _entityDataAccessor.GetBallPosition();
+            transform.rotation = _entityDataAccessor.GetBallRotation();
         }
     }
 }

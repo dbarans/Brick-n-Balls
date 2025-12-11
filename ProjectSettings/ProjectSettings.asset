@@ -12,7 +12,7 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
+  companyName: dbarans
   productName: Brick n Balls
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -919,7 +919,7 @@ PlayerSettings:
   qnxGraphicConfPath: 
   apiCompatibilityLevel: 6
   captureStartupLogs: {}
-  activeInputHandler: 1
+  activeInputHandler: 2
   windowsGamepadBackendHint: 0
   cloudProjectId: 37f867a5-a7b7-4986-a596-d8c9d260c6ca
   framebufferDepthMemorylessMode: 0
