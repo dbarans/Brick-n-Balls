@@ -1,4 +1,5 @@
 using Unity.Burst;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
@@ -6,19 +7,19 @@ using Unity.Transforms;
 
 partial struct BallSystem : ISystem
 {
-    
-    [BurstCompile] 
     public void OnUpdate(ref SystemState state)
     {
-        foreach ((RefRW<LocalTransform> localTransform, RefRW<BallComponent> ball, RefRW<PhysicsVelocity> physicsVelocity)
-            in SystemAPI.Query<RefRW<LocalTransform>, RefRW<BallComponent>, RefRW<PhysicsVelocity>>())
+        var ecb = new EntityCommandBuffer(Allocator.TempJob);
+        
+        foreach ((RefRW<LocalTransform> localTransform, RefRW<BallComponent> ball, RefRW<PhysicsVelocity> physicsVelocity, Entity entity)
+            in SystemAPI.Query<RefRW<LocalTransform>, RefRW<BallComponent>, RefRW<PhysicsVelocity>>().WithEntityAccess())
         {
             // Wait for fire command
             if (!ball.ValueRO.isFired)
             {
                 physicsVelocity.ValueRW.Linear = float3.zero;
                 physicsVelocity.ValueRW.Angular = float3.zero;
-                return;
+                continue;
             }
 
             // Fire initialization
@@ -32,7 +33,6 @@ partial struct BallSystem : ISystem
                     rawDir = math.normalize(new float3(0f, -0.5f, 1f));
                 }
 
-                // Lock X axis (gameplay on Y-Z plane)
                 rawDir.x = 0;
                 rawDir = math.normalize(rawDir);
 
@@ -69,7 +69,15 @@ partial struct BallSystem : ISystem
                 {
                     localTransform.ValueRW.Position.x = 0f;
                 }
+                // Check if ball is out of bounds
+                if (localTransform.ValueRO.Position.y < -10f)
+                {
+                    ecb.DestroyEntity(entity);
+                }
             }
         }
+        
+        ecb.Playback(state.EntityManager);
+        ecb.Dispose();
     }
 }
