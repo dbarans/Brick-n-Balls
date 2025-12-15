@@ -1,0 +1,27 @@
+fileFormatVersion: 2
+guid: c239d71b84cad4ba4bdcee3ad7a3a800
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames: []
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 27039
+  packageName: Bricks Breaker Starter Kit
+  packageVersion: 1.22
+  assetPath: Assets/Bricks Breaker Game/Font/DBXL Nightfever pc ttfs/DBXLNEW_.TTF
+  uploadId: 46394

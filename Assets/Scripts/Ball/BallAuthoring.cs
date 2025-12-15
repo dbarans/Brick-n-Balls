@@ -1,11 +1,8 @@
 using UnityEngine;
 using Unity.Entities;
-using Unity.Mathematics;
 
 public class BallAuthoring : MonoBehaviour
 {
-    public float velocity;
-
     public class Baker : Baker<BallAuthoring>
     {
         public override void Bake(BallAuthoring authoring)
@@ -13,7 +10,7 @@ public class BallAuthoring : MonoBehaviour
             var entity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent(entity, new BallComponent
             {
-                velocity = authoring.velocity,
+                velocity = 0f,
                 isInitialized = false
             });
         }
