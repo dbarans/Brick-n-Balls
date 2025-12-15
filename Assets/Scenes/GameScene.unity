@@ -119,6 +119,53 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &253317005
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 253317007}
+  - component: {fileID: 253317006}
+  m_Layer: 0
+  m_Name: sdfafdf
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &253317006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 253317005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc102960d0e0e1149b46f21d5902fcef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BrickHp1SpritePrefab: {fileID: 2900783581367665332, guid: 7c3a4dc516682e84e83cb10413d39bb3, type: 3}
+  BrickHp2SpritePrefab: {fileID: 4976327176910755613, guid: 9bf28c9422dc2ea48834338399dde1d3, type: 3}
+  BrickHp3SpritePrefab: {fileID: 2305798846232734538, guid: 4d74d0e49cc839042973f125e22661b2, type: 3}
+--- !u!4 &253317007
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 253317005}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -511,7 +558,7 @@ Transform:
   m_GameObject: {fileID: 583011416}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0.7071068, w: 0}
-  m_LocalPosition: {x: 0, y: -0.5, z: 0}
+  m_LocalPosition: {x: 2, y: -0.5, z: 0}
   m_LocalScale: {x: 3.29, y: 3.29, z: 3.29}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -719,4 +766,5 @@ SceneRoots:
   - {fileID: 832575519}
   - {fileID: 1749489844}
   - {fileID: 1169841492}
+  - {fileID: 253317007}
   - {fileID: 465598261}

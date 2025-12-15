@@ -7,7 +7,7 @@ using Unity.Physics;
 [UpdateAfter(typeof(PhysicsSystemGroup))]
 public partial struct BrickSystem : ISystem
 {
-  //  [BurstCompile]
+    [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
         state.Dependency.Complete();
@@ -36,6 +36,15 @@ public partial struct BrickSystem : ISystem
                 brickData.Health -= 1;
                 if (brickData.Health <= 0)
                 {
+                    // Destroy visual GO before destroying entity
+                    if (state.EntityManager.HasComponent<BrickVisualLink>(brickEntity))
+                    {
+                        var visualLink = state.EntityManager.GetComponentData<BrickVisualLink>(brickEntity);
+                        if (visualLink.VisualGameObject != null)
+                        {
+                            UnityEngine.Object.Destroy(visualLink.VisualGameObject);
+                        }
+                    }
                     ecb.DestroyEntity(brickEntity);
                 }
                 else
