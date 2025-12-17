@@ -1,13 +1,17 @@
 using Unity.Entities;
+using Ball;
+using UI;
 
-/// <summary>
-/// Detects game over condition when all balls are depleted and triggers the game over event.
-/// This system runs after ball destruction and spawning to ensure accurate state tracking.
-/// </summary>
-[UpdateInGroup(typeof(SimulationSystemGroup))]
-[UpdateAfter(typeof(BallDestructionSystem))]
-[UpdateAfter(typeof(BallSpawningSystem))]
-public partial class GameOverDetectionSystem : SystemBase
+namespace Game
+{
+    /// <summary>
+    /// Detects game over condition when all balls are depleted and triggers the game over event.
+    /// This system runs after ball destruction and spawning to ensure accurate state tracking.
+    /// </summary>
+    [UpdateInGroup(typeof(SimulationSystemGroup))]
+    [UpdateAfter(typeof(BallDestructionSystem))]
+    [UpdateAfter(typeof(BallSpawningSystem))]
+    public partial class GameOverDetectionSystem : SystemBase
 {
     private int _lastTrackedRemainingBalls = -1;
     private int _lastTrackedBallCount = -1;
@@ -73,5 +77,6 @@ public partial class GameOverDetectionSystem : SystemBase
         _lastTrackedRemainingBalls = -1;
         _lastTrackedBallCount = -1;
     }
+}
 }
 

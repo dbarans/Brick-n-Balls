@@ -1,11 +1,13 @@
 using Unity.Entities;
 using UnityEngine;
 
-/// <summary>
-/// ECS component data for brick entities.
-/// Stores health, score value, and visual type.
-/// </summary>
-public struct BrickComponent : IComponentData
+namespace Brick
+{
+    /// <summary>
+    /// ECS component data for brick entities.
+    /// Stores health, score value, and visual type.
+    /// </summary>
+    public struct BrickComponent : IComponentData
 {
     public int Health;
     public int ScoreValue;
@@ -25,7 +27,8 @@ public enum BrickType
 /// <summary>
 /// Links brick entity to its visual GameObject for synchronization.
 /// </summary>
-public class BrickVisualLink : IComponentData
-{
-    public GameObject VisualGameObject;
+    public class BrickVisualLink : IComponentData
+    {
+        public GameObject VisualGameObject;
+    }
 }

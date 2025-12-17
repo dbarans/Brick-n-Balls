@@ -8,10 +8,9 @@ namespace Input
     /// </summary>
     public class RaycastAimCalculator : IAimCalculator
     {
-        private const float DirectionEpsilon = 0.001f;
-
         public Vector3 CalculateAimDirection(Vector2 screenPosition, Vector3 startPosition, Camera camera)
         {
+            // Create plane perpendicular to X axis (YZ plane) for 2D gameplay
             Plane gameplayPlane = new Plane(Vector3.right, Vector3.zero);
             Ray ray = camera.ScreenPointToRay(screenPosition);
 
@@ -19,8 +18,8 @@ namespace Input
             {
                 Vector3 hitPoint = ray.GetPoint(enter);
                 Vector3 direction = (hitPoint - startPosition).normalized;
-                direction.x = 0;
-                return direction.sqrMagnitude < DirectionEpsilon ? Vector3.zero : direction.normalized;
+                direction.x = 0; // Lock X axis movement
+                return direction.sqrMagnitude < 0.001f ? Vector3.zero : direction.normalized;
             }
 
             return Vector3.zero;

@@ -4,10 +4,12 @@ using Unity.Transforms;
 using Unity.Mathematics;
 using Data;
 
-/// <summary>
-/// Synchronizes GameObject transform with ball entity's ECS transform data.
-/// </summary>
-public class BallVisualSync : MonoBehaviour
+namespace Ball
+{
+    /// <summary>
+    /// Synchronizes GameObject transform with ball entity's ECS transform data.
+    /// </summary>
+    public class BallVisualSync : MonoBehaviour
 {
     private IEntityDataAccessor _entityDataAccessor;
 
@@ -33,4 +35,5 @@ public class BallVisualSync : MonoBehaviour
             transform.rotation = _entityDataAccessor.GetBallRotation();
         }
     }
+}
 }

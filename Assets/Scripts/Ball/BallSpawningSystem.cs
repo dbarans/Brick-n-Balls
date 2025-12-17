@@ -3,13 +3,16 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
+using Game;
 
-/// <summary>
-/// Spawns a new ball when no balls are present on the field
-/// </summary>
-[BurstCompile]
-[UpdateInGroup(typeof(SimulationSystemGroup))]
-partial struct BallSpawningSystem : ISystem
+namespace Ball
+{
+    /// <summary>
+    /// Spawns a new ball when no balls are present on the field
+    /// </summary>
+    [BurstCompile]
+    [UpdateInGroup(typeof(SimulationSystemGroup))]
+    partial struct BallSpawningSystem : ISystem
 {
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
@@ -35,4 +38,5 @@ partial struct BallSpawningSystem : ISystem
             InitialDirection = float3.zero
         });
     }
+}
 }

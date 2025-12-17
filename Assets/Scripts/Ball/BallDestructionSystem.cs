@@ -3,12 +3,15 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
+using Game;
 
-/// <summary>
-/// Destroys balls that fall below the screen and decrements remaining balls count.
-/// </summary>
-[BurstCompile]
-partial struct BallDestructionSystem : ISystem
+namespace Ball
+{
+    /// <summary>
+    /// Destroys balls that fall below the screen and decrements remaining balls count.
+    /// </summary>
+    [BurstCompile]
+    partial struct BallDestructionSystem : ISystem
 {
     private const float BallDestructionThreshold = -10f;
 
@@ -37,5 +40,6 @@ partial struct BallDestructionSystem : ISystem
             SystemAPI.SetSingleton(gameState);
         }
     }
+}
 }
 

@@ -4,15 +4,14 @@ using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
 
-/// <summary>
-/// Handles ball initialization when fired - calculates direction and applies initial velocity.
-/// </summary>
-[BurstCompile]
-partial struct BallInitializationSystem : ISystem
+namespace Ball
 {
-    private const float DirectionEpsilon = 0.001f;
-    private static readonly float3 DefaultDirection = new float3(0f, -0.5f, 1f);
-
+    /// <summary>
+    /// Handles ball initialization when fired - calculates direction and applies initial velocity.
+    /// </summary>
+    [BurstCompile]
+    partial struct BallInitializationSystem : ISystem
+{
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
@@ -23,9 +22,10 @@ partial struct BallInitializationSystem : ISystem
 
             float3 rawDir = ball.ValueRO.InitialDirection;
 
-            if (math.lengthsq(rawDir) < DirectionEpsilon)
+            // Use default upward direction if no direction was set
+            if (math.lengthsq(rawDir) < 0.001f)
             {
-                rawDir = math.normalize(DefaultDirection);
+                rawDir = math.normalize(new float3(0f, -0.5f, 1f));
             }
 
             rawDir.x = 0; // Lock X axis movement
@@ -40,5 +40,6 @@ partial struct BallInitializationSystem : ISystem
             localTransform.ValueRW.Rotation = quaternion.LookRotationSafe(rawDir, math.up());
         }
     }
+}
 }
 

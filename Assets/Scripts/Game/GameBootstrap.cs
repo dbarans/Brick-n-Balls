@@ -1,11 +1,13 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-/// <summary>
-/// Bootstraps the game by loading the UIScene additively.
-/// Disables camera rendering until UI is loaded to prevent showing gameplay before menu.
-/// </summary>
-public class GameBootstrap : MonoBehaviour
+namespace Game
+{
+    /// <summary>
+    /// Bootstraps the game by loading the UIScene additively.
+    /// Disables camera rendering until UI is loaded to prevent showing gameplay before menu.
+    /// </summary>
+    public class GameBootstrap : MonoBehaviour
 {
     private Camera _mainCamera;
 
@@ -55,4 +57,5 @@ public class GameBootstrap : MonoBehaviour
             _mainCamera.enabled = true;
         }
     }
+}
 }

@@ -2,14 +2,18 @@ using Unity.Entities;
 using Unity.Physics.Systems;
 using Unity.Burst;
 using Unity.Physics;
+using Ball;
+using Game;
 
-/// <summary>
-/// Handles ball-brick collisions, decrements brick health, awards points, and destroys bricks when health reaches zero.
-/// Runs after physics simulation to process collision events.
-/// </summary>
-[UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
-[UpdateAfter(typeof(PhysicsSystemGroup))]
-public partial struct BrickSystem : ISystem
+namespace Brick
+{
+    /// <summary>
+    /// Handles ball-brick collisions, decrements brick health, awards points, and destroys bricks when health reaches zero.
+    /// Runs after physics simulation to process collision events.
+    /// </summary>
+    [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
+    [UpdateAfter(typeof(PhysicsSystemGroup))]
+    public partial struct BrickSystem : ISystem
 {
     public void OnUpdate(ref SystemState state)
     {
@@ -48,7 +52,6 @@ public partial struct BrickSystem : ISystem
                 
                 if (brickData.Health <= 0)
                 {
-                    // Destroy visual GO before destroying entity
                     if (state.EntityManager.HasComponent<BrickVisualLink>(brickEntity))
                     {
                         var visualLink = state.EntityManager.GetComponentData<BrickVisualLink>(brickEntity);
@@ -69,4 +72,5 @@ public partial struct BrickSystem : ISystem
         ecb.Playback(state.EntityManager);
         ecb.Dispose();
     }
+}
 }

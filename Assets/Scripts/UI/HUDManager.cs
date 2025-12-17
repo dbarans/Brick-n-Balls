@@ -2,13 +2,16 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 using Unity.Entities;
+using Game;
 
-/// <summary>
-/// Manages UI elements in the separate UIScene.
-/// Handles main menu, game over popup display, and scene navigation.
-/// Subscribes to GameEventBridge events for communication with ECS systems.
-/// </summary>
-public class HUDManager : MonoBehaviour
+namespace UI
+{
+    /// <summary>
+    /// Manages UI elements in the separate UIScene.
+    /// Handles main menu, game over popup display, and scene navigation.
+    /// Subscribes to GameEventBridge events for communication with ECS systems.
+    /// </summary>
+    public class HUDManager : MonoBehaviour
 {
     [SerializeField] private GameObject menuPopup;
     [SerializeField] private UnityEngine.UI.Button startGameButton;
@@ -114,7 +117,7 @@ public class HUDManager : MonoBehaviour
         
         if (finalScoreText != null)
         {
-            finalScoreText.text = $"Final Score: {finalScore}";
+            finalScoreText.text = $"{finalScore}";
         }
     }
 
@@ -126,4 +129,5 @@ public class HUDManager : MonoBehaviour
         Scene activeScene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(activeScene.name);
     }
+}
 }

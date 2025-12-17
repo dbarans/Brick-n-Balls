@@ -4,6 +4,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using Input;
 using Data;
+using Game;
 
 /// <summary>
 /// Coordinates player input and updates ball aiming direction before firing.
@@ -17,6 +18,7 @@ public class GameInputManager : MonoBehaviour
     private IEntityDataAccessor _entityDataAccessor;
     private IAimCalculator _aimCalculator;
     private Camera _mainCamera;
+    private IAimLineRenderer _aimLineRenderer;
 
     /// <summary>
     /// Initializes dependencies via dependency injection. Falls back to default implementations if null.
@@ -51,6 +53,9 @@ public class GameInputManager : MonoBehaviour
         {
             _mainCamera = Camera.main;
         }
+
+        var aimLineRendererComponent = GetComponent<AimLineRenderer>();
+        _aimLineRenderer = aimLineRendererComponent;
     }
 
     private void OnEnable()
@@ -94,12 +99,12 @@ public class GameInputManager : MonoBehaviour
 
         if (!_entityDataAccessor.HasBallEntity()) return;
 
-        // Re-find camera if it's null (it might have been disabled/enabled)
+        
         if (_mainCamera == null)
         {
             _mainCamera = Camera.main;
             
-            // If Camera.main is null, try to find any camera in the scene
+           
             if (_mainCamera == null)
             {
                 var allCameras = FindObjectsByType<Camera>(FindObjectsSortMode.None);
@@ -124,12 +129,21 @@ public class GameInputManager : MonoBehaviour
 
         ballData.InitialDirection = direction;
 
+        if (_aimLineRenderer != null)
+        {
+            _aimLineRenderer.UpdateAimLine((Vector3)startPos, direction);
+        }
+
         if (_inputProvider.GetFireInput())
         {
             ballData.IsFired = true;
+            
+            if (_aimLineRenderer != null)
+            {
+                _aimLineRenderer.HideLine();
+            }
         }
 
         _entityDataAccessor.SetBallComponent(ballData);
-        Debug.DrawLine(startPos, (Vector3)startPos + direction * DebugLineLength, Color.green);
     }
 }

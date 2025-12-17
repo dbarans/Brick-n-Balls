@@ -4,11 +4,13 @@ using Unity.Transforms;
 using Unity.Mathematics;
 using System.Collections;
 
-/// <summary>
-/// Creates and manages visual GameObjects for brick entities.
-/// Waits for ECS world to be ready before initializing visuals to ensure all bricks are baked.
-/// </summary>
-public class BrickVisualManager : MonoBehaviour
+namespace Brick
+{
+    /// <summary>
+    /// Creates and manages visual GameObjects for brick entities.
+    /// Waits for ECS world to be ready before initializing visuals to ensure all bricks are baked.
+    /// </summary>
+    public class BrickVisualManager : MonoBehaviour
 {
     [Header("Sprite Prefabs")]
     public GameObject BrickHp1SpritePrefab;
@@ -61,13 +63,12 @@ public class BrickVisualManager : MonoBehaviour
         var entityManager = world.EntityManager;
         var query = entityManager.CreateEntityQuery(typeof(BrickComponent), typeof(LocalTransform));
 
-        using (var entities = query.ToEntityArray(Unity.Collections.Allocator.Temp))
-        {
-            foreach (var entity in entities)
+            using (var entities = query.ToEntityArray(Unity.Collections.Allocator.Temp))
             {
-                // Skip bricks that already have visuals
-                if (entityManager.HasComponent<BrickVisualLink>(entity))
-                    continue;
+                foreach (var entity in entities)
+                {
+                    if (entityManager.HasComponent<BrickVisualLink>(entity))
+                        continue;
 
                 var brick = entityManager.GetComponentData<BrickComponent>(entity);
                 var transform = entityManager.GetComponentData<LocalTransform>(entity);
@@ -96,8 +97,11 @@ public class BrickVisualManager : MonoBehaviour
                 visual.name = $"BrickVisual_{entity.Index}_{brick.Type}";
                 visual.transform.position = transform.Position;
                 visual.transform.rotation = transform.Rotation;
-                float scale = transform.Scale;
-                visual.transform.localScale = new Vector3(scale, scale, scale);
+
+                // Apply ECS scale on top of prefab's original scale
+                Vector3 prefabScale = visual.transform.localScale;
+                float ecsScale = transform.Scale;
+                visual.transform.localScale = prefabScale * ecsScale;
 
                 var sync = visual.GetComponent<BrickVisualSync>();
                 if (sync == null)
@@ -115,5 +119,6 @@ public class BrickVisualManager : MonoBehaviour
         
         _initialized = true;
     }
+}
 }
 

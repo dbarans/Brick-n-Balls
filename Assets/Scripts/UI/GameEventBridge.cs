@@ -1,10 +1,12 @@
 using System;
 
-/// <summary>
-/// Central communication bridge between ECS systems and MonoBehaviour UI components.
-/// Provides static events for cross-layer communication.
-/// </summary>
-public static class GameEventBridge
+namespace UI
+{
+    /// <summary>
+    /// Central communication bridge between ECS systems and MonoBehaviour UI components.
+    /// Provides static events for cross-layer communication.
+    /// </summary>
+    public static class GameEventBridge
 {
     /// <summary>
     /// Event fired when game over condition is detected. Parameter: final score.
@@ -18,4 +20,5 @@ public static class GameEventBridge
     {
         OnGameOver = null;
     }
+}
 }
