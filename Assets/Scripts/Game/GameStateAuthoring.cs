@@ -2,6 +2,10 @@ using UnityEngine;
 using Unity.Entities;
 using Unity.Mathematics;
 
+/// <summary>
+/// Authoring component for game state singleton.
+/// Configures ball prefab, starting ball count, spawn position, and ball velocity from Unity Editor.
+/// </summary>
 public class GameStateAuthoring : MonoBehaviour
 {
     public GameObject BallPrefab;
@@ -20,7 +24,8 @@ public class GameStateAuthoring : MonoBehaviour
                 BallPrefab = GetEntity(authoring.BallPrefab, TransformUsageFlags.Dynamic),
                 RemainingBalls = authoring.StartingBalls,
                 BallStartPosition = authoring.StartPosition,
-                BallVelocity = authoring.BallVelocity
+                BallVelocity = authoring.BallVelocity,
+                IsGameStarted = false
             });
         }
     }

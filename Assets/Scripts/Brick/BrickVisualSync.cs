@@ -10,15 +10,12 @@ public class BrickVisualSync : MonoBehaviour
 {
     private Entity _brickEntity;
     private EntityManager _entityManager;
-    private bool _isInitialized;
 
     public void Initialize(Entity brickEntity, EntityManager entityManager)
     {
         _brickEntity = brickEntity;
         _entityManager = entityManager;
-        _isInitialized = true;
         
-        // Set initial position
         if (_entityManager.HasComponent<LocalTransform>(_brickEntity))
         {
             var transform = _entityManager.GetComponentData<LocalTransform>(_brickEntity);

@@ -10,6 +10,8 @@ using Unity.Transforms;
 [BurstCompile]
 partial struct BallDestructionSystem : ISystem
 {
+    private const float BallDestructionThreshold = -10f;
+
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
@@ -19,7 +21,7 @@ partial struct BallDestructionSystem : ISystem
         foreach ((RefRO<LocalTransform> localTransform, Entity entity)
             in SystemAPI.Query<RefRO<LocalTransform>>().WithAll<BallComponent>().WithEntityAccess())
         {
-            if (localTransform.ValueRO.Position.y < -10f)
+            if (localTransform.ValueRO.Position.y < BallDestructionThreshold)
             {
                 ecb.DestroyEntity(entity);
                 ballDestroyed = true;

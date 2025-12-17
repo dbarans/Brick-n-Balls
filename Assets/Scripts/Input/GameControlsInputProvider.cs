@@ -3,10 +3,11 @@ using UnityEngine.InputSystem;
 
 namespace Input
 {
+
     public class GameControlsInputProvider : IInputProvider
 {
     private GameControls _controls;
-    private bool _fireRequest;
+    private bool _fireRequest; // Flag to track fire input, reset each frame
 
     public GameControlsInputProvider()
     {
@@ -35,6 +36,9 @@ namespace Input
         _controls.Disable();
     }
 
+    /// <summary>
+    /// Resets fire request flag. Should be called each frame after processing input.
+    /// </summary>
     public void ResetFireRequest()
     {
         _fireRequest = false;

@@ -1,6 +1,10 @@
 using UnityEngine;
 using Unity.Entities;
 
+/// <summary>
+/// Authoring component for ball entities.
+/// Creates ball entities with default uninitialized state.
+/// </summary>
 public class BallAuthoring : MonoBehaviour
 {
     public class Baker : Baker<BallAuthoring>
@@ -10,8 +14,8 @@ public class BallAuthoring : MonoBehaviour
             var entity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent(entity, new BallComponent
             {
-                velocity = 0f,
-                isInitialized = false
+                Velocity = 0f,
+                IsInitialized = false
             });
         }
     }

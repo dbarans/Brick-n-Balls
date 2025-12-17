@@ -4,6 +4,10 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 
+/// <summary>
+/// Spawns a new ball when no balls are present on the field
+/// </summary>
+[BurstCompile]
 [UpdateInGroup(typeof(SimulationSystemGroup))]
 partial struct BallSpawningSystem : ISystem
 {
@@ -11,6 +15,9 @@ partial struct BallSpawningSystem : ISystem
     public void OnUpdate(ref SystemState state)
     {
         if (!SystemAPI.TryGetSingleton<GameState>(out var gameState)) return;
+
+        // Don't spawn balls until game is started
+        if (!gameState.IsGameStarted) return;
 
         var ballQuery = SystemAPI.QueryBuilder().WithAll<BallComponent>().Build();
         if (!ballQuery.IsEmpty) return;
@@ -22,10 +29,10 @@ partial struct BallSpawningSystem : ISystem
 
         state.EntityManager.SetComponentData(newBall, new BallComponent
         {
-            velocity = gameState.BallVelocity,
-            isFired = false,
-            isInitialized = false,
-            initialDirection = float3.zero
+            Velocity = gameState.BallVelocity,
+            IsFired = false,
+            IsInitialized = false,
+            InitialDirection = float3.zero
         });
     }
 }

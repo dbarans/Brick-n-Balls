@@ -4,6 +4,10 @@ using Unity.Transforms;
 
 namespace Data
 {
+    /// <summary>
+    /// Provides access to ball entity data in the ECS world.
+    /// Assumes only one ball entity exists at a time.
+    /// </summary>
     public class EntityDataAccessor : IEntityDataAccessor
 {
     private EntityManager _entityManager;
@@ -58,7 +62,7 @@ namespace Data
         if (_ballQuery.IsEmpty) return;
         var entity = _ballQuery.GetSingletonEntity();
         var ballData = _entityManager.GetComponentData<BallComponent>(entity);
-        ballData.initialDirection = direction;
+        ballData.InitialDirection = direction;
         _entityManager.SetComponentData(entity, ballData);
     }
 
@@ -67,7 +71,7 @@ namespace Data
         if (_ballQuery.IsEmpty) return;
         var entity = _ballQuery.GetSingletonEntity();
         var ballData = _entityManager.GetComponentData<BallComponent>(entity);
-        ballData.isFired = fired;
+        ballData.IsFired = fired;
         _entityManager.SetComponentData(entity, ballData);
     }
 

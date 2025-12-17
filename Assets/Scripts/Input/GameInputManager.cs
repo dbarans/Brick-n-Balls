@@ -10,6 +10,9 @@ using Data;
 /// </summary>
 public class GameInputManager : MonoBehaviour
 {
+    private const float DirectionEpsilon = 0.001f;
+    private const float DebugLineLength = 5f;
+
     private IInputProvider _inputProvider;
     private IEntityDataAccessor _entityDataAccessor;
     private IAimCalculator _aimCalculator;
@@ -68,26 +71,65 @@ public class GameInputManager : MonoBehaviour
 
     private void HandleInputAndSync()
     {
+        // Don't process input until game is started
+        var world = World.DefaultGameObjectInjectionWorld;
+        if (world != null && world.IsCreated)
+        {
+            var entityManager = world.EntityManager;
+            var gameStateQuery = entityManager.CreateEntityQuery(typeof(GameState));
+            if (gameStateQuery.HasSingleton<GameState>())
+            {
+                var gameState = gameStateQuery.GetSingleton<GameState>();
+                if (!gameState.IsGameStarted) return;
+            }
+            else
+            {
+                return;
+            }
+        }
+        else
+        {
+            return;
+        }
+
         if (!_entityDataAccessor.HasBallEntity()) return;
+
+        // Re-find camera if it's null (it might have been disabled/enabled)
+        if (_mainCamera == null)
+        {
+            _mainCamera = Camera.main;
+            
+            // If Camera.main is null, try to find any camera in the scene
+            if (_mainCamera == null)
+            {
+                var allCameras = FindObjectsByType<Camera>(FindObjectsSortMode.None);
+                if (allCameras.Length > 0)
+                {
+                    _mainCamera = allCameras[0];
+                }
+            }
+        }
+
+        if (_mainCamera == null || !_mainCamera.enabled) return;
 
         Vector2 mouseScreenPos = _inputProvider.GetAimInput();
         var ballData = _entityDataAccessor.GetBallComponent();
         var startPos = _entityDataAccessor.GetBallPosition();
 
-        if (ballData.isFired) return;
+        if (ballData.IsFired) return;
 
         Vector3 direction = _aimCalculator.CalculateAimDirection(mouseScreenPos, (Vector3)startPos, _mainCamera);
 
-        if (direction.sqrMagnitude < 0.001f) return;
+        if (direction.sqrMagnitude < DirectionEpsilon) return;
 
-        ballData.initialDirection = direction;
+        ballData.InitialDirection = direction;
 
         if (_inputProvider.GetFireInput())
         {
-            ballData.isFired = true;
+            ballData.IsFired = true;
         }
 
         _entityDataAccessor.SetBallComponent(ballData);
-        Debug.DrawLine(startPos, (Vector3)startPos + direction * 5f, Color.green);
+        Debug.DrawLine(startPos, (Vector3)startPos + direction * DebugLineLength, Color.green);
     }
 }

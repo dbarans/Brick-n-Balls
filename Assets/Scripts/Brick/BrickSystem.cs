@@ -3,11 +3,14 @@ using Unity.Physics.Systems;
 using Unity.Burst;
 using Unity.Physics;
 
+/// <summary>
+/// Handles ball-brick collisions, decrements brick health, awards points, and destroys bricks when health reaches zero.
+/// Runs after physics simulation to process collision events.
+/// </summary>
 [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
 [UpdateAfter(typeof(PhysicsSystemGroup))]
 public partial struct BrickSystem : ISystem
 {
-    [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
         state.Dependency.Complete();
@@ -15,6 +18,7 @@ public partial struct BrickSystem : ISystem
         var brickLookup = SystemAPI.GetComponentLookup<BrickComponent>(false);
         var ballLookup = SystemAPI.GetComponentLookup<BallComponent>(true);
         var ecb = new EntityCommandBuffer(Unity.Collections.Allocator.Temp);
+        
         foreach (var collision in simulation.AsSimulation().CollisionEvents)
         {
             Entity entityA = collision.EntityA;
@@ -34,6 +38,14 @@ public partial struct BrickSystem : ISystem
             {
                 var brickData = brickLookup[brickEntity];
                 brickData.Health -= 1;
+                
+                // Add 1 point for each collision with a brick
+                if (SystemAPI.HasSingleton<GameScoreData>())
+                {
+                    var scoreData = SystemAPI.GetSingletonRW<GameScoreData>();
+                    scoreData.ValueRW.CurrentScore += 1;
+                }
+                
                 if (brickData.Health <= 0)
                 {
                     // Destroy visual GO before destroying entity

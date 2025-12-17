@@ -46,9 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5364d18e24b588949aa1a17c3e73446a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 1
-  scoreValue: 1
-  type: 1
+  Health: 1
+  ScoreValue: 1
+  Type: 1
 --- !u!65 &6863973632292687016
 BoxCollider:
   m_ObjectHideFlags: 0
